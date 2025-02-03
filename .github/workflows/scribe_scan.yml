@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-            repository: scribe-security/complaince
+            repository: scribe-security/compliance
             ref: main
 
       # - name: Get Context
