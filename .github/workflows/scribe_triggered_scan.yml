@@ -1,7 +1,7 @@
 name: scribe_scan
 on:
   repository_dispatch:
-    types: [my-event]
+    types: [scribe_collect_evidence]
 jobs:
   myEvent:
     runs-on: ubuntu-latest
