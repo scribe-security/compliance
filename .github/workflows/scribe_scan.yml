@@ -31,9 +31,9 @@ jobs:
 
 
 
-      # if target is not provided, issue valint directly on the traget.
+      # if target is provided, scan the target
       - name:  Target Image, Src, Generate BOM abd SLSA, upload to scribe
-        if : ${{ !inputs.target }}
+        if : ${{ inputs.target }}
         id: bom_image_tag
         uses: scribe-security/action-bom@dev
         with:
@@ -44,7 +44,7 @@ jobs:
           format: attest
           filter-regex: ./**/test/**/
           scribe-client-secret: ${{ secrets.SCRIBE_TOKEN }}
-          
+
           # product-key: valint
           # product-version: ${{ env.version }}
          
