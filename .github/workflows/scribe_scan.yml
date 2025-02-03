@@ -28,4 +28,23 @@ jobs:
       - run: |
           ls -lh
           printenv
+
+
+
+      # if target is not provided, issue valint directly on the traget.
+      - name:  Target Image, Src, Generate BOM abd SLSA, upload to scribe
+        if : ${{ !inputs.target }}
+        id: bom_image_tag
+        uses: scribe-security/action-bom@dev
+        with:
+          target: ${{ inputs.target }}
+          input: git:.
+          provenance: true
+          verbose: 2
+          format: attest
+          filter-regex: ./**/test/**/
+          scribe-client-secret: ${{ secrets.SCRIBE_TOKEN }}
           
+          # product-key: valint
+          # product-version: ${{ env.version }}
+         
