@@ -1,5 +1,4 @@
-name: Scribe triggered scan
-id: scribe_scan
+name: scribe_scan
 on:
   repository_dispatch:
     types: [my-event]
