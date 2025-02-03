@@ -22,8 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-            repository: scribe-security/compliance
-            ref: main
+            path: target_repo
 
       - run: |
           ls -lh
@@ -38,7 +37,7 @@ jobs:
         uses: scribe-security/action-bom@dev
         with:
           target: ${{ inputs.target }}
-          input: git:.
+          input: git:./target_repo
           provenance: true
           verbose: 2
           format: attest
