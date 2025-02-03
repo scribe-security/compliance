@@ -25,25 +25,7 @@ jobs:
             repository: scribe-security/compliance
             ref: main
 
-      # - name: Get Context
-      #   run: |
-      #     echo "Getting context..."
-      #     ls -lh
-      #     pwd
-      #     #source ./.github/scripts/context
-
-      #     #         echo "Rebuilding cache..."
-      #     # source "${GITHUB_ACTION_PATH}/context"
-      #     # printenv
-
-      #     # JSON_STRING=$( jq -n \
-      #     #               --arg git_commit "${DOCKER_CONTEXT_GIT_COMMIT}" \
-      #     #               --arg git_url "${DOCKER_CONTEXT_GIT_URL}" \
-      #     #               --arg git_ref "${DOCKER_CONTEXT_GIT_REF}" \
-      #     #               --arg event "${DOCKER_CONTEXT_EVENT}" \
-      #     #               --arg workflow "${DOCKER_CONTEXT_WORKFLOW}" \
-      #     #               --arg run_id "${DOCKER_CONTEXT_RUN_ID}" \
-      #     #               --arg organization "${DOCKER_CONTEXT_ORGANIZATION}" \
-      #     #               --arg platform "${DOCKER_CONTEXT_PLATFORM}" \
-      #     #               --arg target "${{ inputs.target || env.TARGET || env.EVIDENCE_TARGET }}" \
-      #     #               '{git_commit: $git_commit, git_url: $git_url, git_ref: $git_ref, event: $event, workflow: $workflow, run_id: $run_id, organization: $organization, platform: $platform, target: $target}' )
+      - run: |
+          ls -lh
+          printenv
+          
