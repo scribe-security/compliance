@@ -1,0 +1,56 @@
+# Reusable GitHub Actions workflow for Scribe evidence job
+
+name: .scribe-in-pipeline-scan
+
+env:
+  GOPRIVATE: "github.com/scribe-security/*"
+  ARTIFACTORY_URL: "https://scribesecuriy.jfrog.io"
+  GO_VERSION: "1.22"
+
+on:
+  workflow_call:
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+      SCRIBE_TOKEN:
+        required: false
+    inputs:
+      GITHUB_USER:
+        type: string
+        required: true
+
+jobs:
+  scribe-scan:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+            repository: scribe-security/complaince
+            ref: main
+
+      # - name: Get Context
+      #   run: |
+      #     echo "Getting context..."
+      #     ls -lh
+      #     pwd
+      #     #source ./.github/scripts/context
+
+      #     #         echo "Rebuilding cache..."
+      #     # source "${GITHUB_ACTION_PATH}/context"
+      #     # printenv
+
+      #     # JSON_STRING=$( jq -n \
+      #     #               --arg git_commit "${DOCKER_CONTEXT_GIT_COMMIT}" \
+      #     #               --arg git_url "${DOCKER_CONTEXT_GIT_URL}" \
+      #     #               --arg git_ref "${DOCKER_CONTEXT_GIT_REF}" \
+      #     #               --arg event "${DOCKER_CONTEXT_EVENT}" \
+      #     #               --arg workflow "${DOCKER_CONTEXT_WORKFLOW}" \
+      #     #               --arg run_id "${DOCKER_CONTEXT_RUN_ID}" \
+      #     #               --arg organization "${DOCKER_CONTEXT_ORGANIZATION}" \
+      #     #               --arg platform "${DOCKER_CONTEXT_PLATFORM}" \
+      #     #               --arg target "${{ inputs.target || env.TARGET || env.EVIDENCE_TARGET }}" \
+      #     #               '{git_commit: $git_commit, git_url: $git_url, git_ref: $git_ref, event: $event, workflow: $workflow, run_id: $run_id, organization: $organization, platform: $platform, target: $target}' )
