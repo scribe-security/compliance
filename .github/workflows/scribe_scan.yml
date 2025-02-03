@@ -28,8 +28,6 @@ jobs:
           ls -lh
           printenv
 
-
-
       # if target is provided, scan the target
       - name:  Target Image, Src, Generate BOM abd SLSA, upload to scribe
         if : ${{ inputs.target }}
@@ -40,7 +38,6 @@ jobs:
           input: git:./target_repo
           provenance: true
           verbose: 2
-          format: attest
           filter-regex: ./**/test/**/
           scribe-client-secret: ${{ secrets.SCRIBE_TOKEN }}
 
