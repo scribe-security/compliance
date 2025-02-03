@@ -8,7 +8,7 @@ on:
       SCRIBE_TOKEN:
         required: false
     inputs:
-      TARGET:
+      target:
         type: string
         required: false
 
