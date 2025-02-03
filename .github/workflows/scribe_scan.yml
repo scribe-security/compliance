@@ -8,9 +8,9 @@ on:
       SCRIBE_TOKEN:
         required: false
     inputs:
-      GITHUB_USER:
+      TARGET:
         type: string
-        required: true
+        required: false
 
 jobs:
   scribe-scan:
