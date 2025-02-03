@@ -2,11 +2,6 @@
 
 name: .scribe-in-pipeline-scan
 
-env:
-  GOPRIVATE: "github.com/scribe-security/*"
-  ARTIFACTORY_URL: "https://scribesecuriy.jfrog.io"
-  GO_VERSION: "1.22"
-
 on:
   workflow_call:
     secrets:
