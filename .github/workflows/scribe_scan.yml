@@ -5,8 +5,6 @@ name: .scribe-in-pipeline-scan
 on:
   workflow_call:
     secrets:
-      GITHUB_TOKEN:
-        required: true
       SCRIBE_TOKEN:
         required: false
     inputs:
