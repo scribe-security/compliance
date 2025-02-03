@@ -3,7 +3,7 @@ on:
   repository_dispatch:
     types: [scribe_collect_evidence]
 jobs:
-  myEvent:
+  scribe_collect_evidence:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,3 +13,11 @@ jobs:
       - run: |
           # print in json github.event
           echo "${{ toJson(github.event) }}"
+
+      # - name: Scan SCM
+      #   using: scribe-security/actions-platforms@dev
+      #   with:
+      #     platform: ${{ github.event.client_payload.platform }}
+      #     command: discover
+      #     args:
+      #       --repository.scope='${{ github.event.client_payload.url }}'
