@@ -7,6 +7,8 @@ on:
     secrets:
       SCRIBE_TOKEN:
         required: false
+      DISCOVER_GITHUB_TOKEN:
+        required: true
     inputs:
       target:
         type: string
@@ -14,9 +16,11 @@ on:
       product-key:
         type: string
         required: false
+        default: "simplified_default"
       product-version:
         type: string
         required: false
+        default: "v1"
       initative:
         type: string
         required: false
@@ -49,6 +53,21 @@ jobs:
           ls -lhR ./compliance_repo/.github || true
           source ./compliance_repo/.github/workflows/context
           printenv | grep SCRIBE_CONTEXT
+
+
+      - name: Discover Github Repo
+        uses: scribe-security/action-platforms@dev
+        with:
+          command: discover
+          platform: github
+          args: >-
+            --scope.organization $SCRIBE_CONTEXT_ORGANIZATION
+            --scope.repository $SCRIBE_CONTEXT_REPO_NAME
+            --organization.mapping *::${{ inputs.product_key }}::${{ inputs.product_version }}
+            --repository.mapping *::${{ inputs.product_key }}::${{ inputs.product_version }}
+        env:
+          SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DISCOVER_GITHUB_TOKEN }}
 
       # - name: Run Platforms
       #   uses: scribe-security/action-platforms@dev
