@@ -60,9 +60,10 @@ jobs:
         with:
           command: discover
           platform: github
+          log-level: TRACE
           args: >-
-            --scope.organization $SCRIBE_CONTEXT_ORGANIZATION
-            --scope.repository $SCRIBE_CONTEXT_REPO_NAME
+            --scope.organization ${{ env.SCRIBE_CONTEXT_ORG_NAME }}
+            --scope.repository ${{ env.SCRIBE_CONTEXT_REPO_NAME }}
             --organization.mapping *::${{ inputs.product_key }}::${{ inputs.product_version }}
             --repository.mapping *::${{ inputs.product_key }}::${{ inputs.product_version }}
         env:
