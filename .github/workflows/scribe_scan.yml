@@ -28,19 +28,26 @@ jobs:
           ls -lh
           printenv
 
-      # if target is provided, scan the target
-      - name:  Target Image, Src, Generate BOM abd SLSA, upload to scribe
-        if : ${{ inputs.target }}
-        id: bom_image_tag
-        uses: scribe-security/action-bom@dev
-        with:
-          target: ${{ inputs.target }}
-          input: git:./target_repo
-          provenance: true
-          verbose: 2
-          filter-regex: ./**/test/**/
-          scribe-client-secret: ${{ secrets.SCRIBE_TOKEN }}
+      - name:  Get Platforms Scope
+        run: |
+          source target_repo/.github/workflows/context
+          printenv | grep SCRIBE_CONTEXT
+          
 
-          # product-key: valint
-          # product-version: ${{ env.version }}
+
+      # # if target is provided, scan the target
+      # - name:  Target Image, Src, Generate BOM abd SLSA, upload to scribe
+      #   if : ${{ inputs.target }}
+      #   id: bom_image_tag
+      #   uses: scribe-security/action-bom@dev
+      #   with:
+      #     target: ${{ inputs.target }}
+      #     input: git:./target_repo
+      #     provenance: true
+      #     verbose: 2
+      #     filter-regex: ./**/test/**/
+      #     scribe-client-secret: ${{ secrets.SCRIBE_TOKEN }}
+
+      #     # product-key: valint
+      #     # product-version: ${{ env.version }}
          
