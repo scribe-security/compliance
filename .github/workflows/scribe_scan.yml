@@ -9,6 +9,10 @@ on:
         required: false
       DISCOVER_GITHUB_TOKEN:
         required: true
+      DOCKERHUB_TOKEN:
+        required: false
+      DOCKERHUB_USERNAME:
+        required: false
     inputs:
       target:
         type: string
@@ -83,6 +87,10 @@ jobs:
           args: >-
             --namespace-list=${{ env.SCRIBE_CONTEXT_IMAGE_NAMESPACE }}
             --repository.mapping=${{ env.SCRIBE_CONTEXT_IMAGE_REPO }}::${{ inputs.product-key }}::${{ inputs.product-version }}
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
 
       - name: Upload Database Artifact
         uses: actions/upload-artifact@v4
