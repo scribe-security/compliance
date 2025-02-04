@@ -43,15 +43,18 @@ jobs:
             path: compliance_repo
             repository: scribe-security/compliance
 
-      - run: |
-          ls -lh
-          printenv
-
       - name:  Get Platforms Scope
         run: |
-          ls -lh ./compliance_repo/ || true
-          ls -lhR ./compliance_repo/.github || true
           source ./compliance_repo/.github/workflows/context
+
+          # if target is provided get repo and repo namesapce from last two elements
+          if [ -n "${{ inputs.target }}" ]; then
+            export SCRIBE_CONTEXT_IMAGE_NAMESPACE=$(echo ${{ inputs.target }} | awk -F'/' '{print $(NF-1)}')
+            export SCRIBE_CONTEXT_IMAGE_REPO=$(echo ${{ inputs.target }} | awk -F'/' '{print $NF}')
+            echo "SCRIBE_CONTEXT_IMAGE_NAMESPACE=${SCRIBE_CONTEXT_IMAGE_NAMESPACE}" >> $GITHUB_ENV
+            echo "SCRIBE_CONTEXT_IMAGE_REPO=${SCRIBE_CONTEXT_IMAGE_REPO}" >> $GITHUB_ENV
+          fi
+
           printenv | grep SCRIBE_CONTEXT
 
       - name: Discover Github Repo
@@ -70,12 +73,25 @@ jobs:
           SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.DISCOVER_GITHUB_TOKEN }}
 
-            # --scope.organization=scribe-security
-            # --scope.repository *mongo* *scribe-training-vue-project
-            # --workflow.skip --commit.skip --scope.branch=main
-            # --organization.mapping=scribe-security::scribe-training-vue-project::${{ env.SCRIBE_PRODUCT_VERSION }}
-            # --repository.mapping=scribe-security*scribe-training-vue-project::scribe-training-vue-project::${{ env.SCRIBE_PRODUCT_VERSION }}
 
+      # - name: Discover Dockerhub Repo
+      #   uses: scribe-security/action-platforms@dev
+      #   with:
+      #     command: discover
+      #     platform: dockerhub
+      #     log-level: TRACE
+      #     args: >-
+      #       --namespace-list=${{ env.SCRIBE_CONTEXT_ORGANIZATION }}
+      #       --repository.mapping=${{ inputs.product-key }}::${{ inputs.product-key }}::${{ inputs.product-version }}
+      #       --repository.mapping=gatekeeper-${{ inputs.product-key }}::${{ inputs.product-key }}::${{ inputs.product-version }}
+      #       --workflow.skip --commit.skip
+
+      - name: Upload Database Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: |
+            platforms.db
+            output
 
       # - name: Run Platforms
       #   uses: scribe-security/action-platforms@dev
