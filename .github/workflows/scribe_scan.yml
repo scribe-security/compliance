@@ -11,6 +11,15 @@ on:
       target:
         type: string
         required: false
+      product-key:
+        type: string
+        required: false
+      product-version:
+        type: string
+        required: false
+      initative:
+        type: string
+        required: false
 
 jobs:
   scribe-scan:
@@ -24,15 +33,21 @@ jobs:
         with:
             path: target_repo
 
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+            path: compliance_repo
+            repository: scribe-security/compliance
+
       - run: |
           ls -lh
           printenv
 
       - name:  Get Platforms Scope
         run: |
-          ls -lh ./target_repo/ || true
-          ls -lhR ./target_repo/.github || true
-          source ./target_repo/.github/workflows/context
+          ls -lh ./compliance_repo/ || true
+          ls -lhR ./compliance_repo/.github || true
+          source ./compliance_repo/.github/workflows/context
           printenv | grep SCRIBE_CONTEXT
           
 
