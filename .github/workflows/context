@@ -358,7 +358,7 @@ main() {
     # UPPER CASE
     k="$(echo "$k" | tr '[:lower:]' '[:upper:]')"
     # if github env exists
-    export SCRIBE_CONTEXT_$k="$v" >> $GITHUB_ENV
+    echo SCRIBE_CONTEXT_$k="$v" >> $GITHUB_ENV
     
     echo "$k=$v"
   done
