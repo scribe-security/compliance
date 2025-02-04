@@ -62,10 +62,10 @@ jobs:
           platform: github
           log-level: TRACE
           args: >-
-            --scope.organization ${{ env.SCRIBE_CONTEXT_ORG_NAME }}
+            --scope.organization ${{ env.SCRIBE_CONTEXT_ORGANIZATION }}
             --scope.repository ${{ env.SCRIBE_CONTEXT_REPO_NAME }}
-            --organization.mapping *::${{ inputs.product_key }}::${{ inputs.product_version }}
-            --repository.mapping *::${{ inputs.product_key }}::${{ inputs.product_version }}
+            --organization.mapping *::${{ inputs.product-key }}::${{ inputs.product-version }}
+            --repository.mapping *::${{ inputs.product-key }}::${{ inputs.product-version }}
         env:
           SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.DISCOVER_GITHUB_TOKEN }}
