@@ -57,34 +57,32 @@ jobs:
 
           printenv | grep SCRIBE_CONTEXT
 
-      - name: Discover Github Repo
-        uses: scribe-security/action-platforms@dev
-        with:
-          command: discover
-          platform: github
-          log-level: TRACE
-          args: >-
-            --scope.organization=${{ env.SCRIBE_CONTEXT_ORGANIZATION }}
-            --scope.repository ${{ env.SCRIBE_CONTEXT_REPO_NAME }}
-            --organization.mapping=${{ env.SCRIBE_CONTEXT_ORGANIZATION }}::${{ inputs.product-key }}::${{ inputs.product-version }}
-            --repository.mapping=${{ env.SCRIBE_CONTEXT_REPO_NAME }}::${{ inputs.product-key }}::${{ inputs.product-version }}
-            --workflow.skip --commit.skip --scope.branch=main
-        env:
-          SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.DISCOVER_GITHUB_TOKEN }}
-
-
-      # - name: Discover Dockerhub Repo
+      # - name: Discover Github Repo
       #   uses: scribe-security/action-platforms@dev
       #   with:
       #     command: discover
-      #     platform: dockerhub
+      #     platform: github
       #     log-level: TRACE
       #     args: >-
-      #       --namespace-list=${{ env.SCRIBE_CONTEXT_ORGANIZATION }}
-      #       --repository.mapping=${{ inputs.product-key }}::${{ inputs.product-key }}::${{ inputs.product-version }}
-      #       --repository.mapping=gatekeeper-${{ inputs.product-key }}::${{ inputs.product-key }}::${{ inputs.product-version }}
-      #       --workflow.skip --commit.skip
+      #       --scope.organization=${{ env.SCRIBE_CONTEXT_ORGANIZATION }}
+      #       --scope.repository ${{ env.SCRIBE_CONTEXT_REPO_NAME }}
+      #       --organization.mapping=${{ env.SCRIBE_CONTEXT_ORGANIZATION }}::${{ inputs.product-key }}::${{ inputs.product-version }}
+      #       --repository.mapping=${{ env.SCRIBE_CONTEXT_REPO_NAME }}::${{ inputs.product-key }}::${{ inputs.product-version }}
+      #       --workflow.skip --commit.skip --scope.branch=main
+      #   env:
+      #     SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
+      #     GITHUB_TOKEN: ${{ secrets.DISCOVER_GITHUB_TOKEN }}
+
+      - name: Discover Dockerhub Target Image
+        if : ${{ inputs.target }}
+        uses: scribe-security/action-platforms@dev
+        with:
+          command: discover
+          platform: dockerhub
+          log-level: TRACE
+          args: >-
+            --namespace-list=${{ env.SCRIBE_CONTEXT_IMAGE_NAMESPACE }}
+            --repository.mapping=${{ env.SCRIBE_CONTEXT_IMAGE_REPO }}::${{ inputs.product-key }}::${{ inputs.product-version }}
 
       - name: Upload Database Artifact
         uses: actions/upload-artifact@v4
