@@ -30,7 +30,9 @@ jobs:
 
       - name:  Get Platforms Scope
         run: |
-          source target_repo/.github/workflows/context
+          ls -lh ./target_repo/ || true
+          ls -lhR ./target_repo/.github || true
+          source ./target_repo/.github/workflows/context
           printenv | grep SCRIBE_CONTEXT
           
 
