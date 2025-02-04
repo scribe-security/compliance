@@ -62,13 +62,22 @@ jobs:
           platform: github
           log-level: TRACE
           args: >-
-            --scope.organization ${{ env.SCRIBE_CONTEXT_ORGANIZATION }}
+            --scope.organization=${{ env.SCRIBE_CONTEXT_ORGANIZATION }}
             --scope.repository ${{ env.SCRIBE_CONTEXT_REPO_NAME }}
-            --organization.mapping *::${{ inputs.product-key }}::${{ inputs.product-version }}
-            --repository.mapping *::${{ inputs.product-key }}::${{ inputs.product-version }}
+            --organization.mapping=${{ env.SCRIBE_CONTEXT_ORGANIZATION }}::${{ inputs.product-key }}::${{ inputs.product-version }}
+            --repository.mapping=${{ env.SCRIBE_CONTEXT_REPO_NAME }}::${{ inputs.product-key }}::${{ inputs.product-version }}
+            --workflow.skip --commit.skip --scope.branch=main
         env:
           SCRIBE_TOKEN: ${{ secrets.SCRIBE_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.DISCOVER_GITHUB_TOKEN }}
+
+
+            # --scope.organization=scribe-security
+            # --scope.repository *mongo* *scribe-training-vue-project
+            # --workflow.skip --commit.skip --scope.branch=main
+            # --organization.mapping=scribe-security::scribe-training-vue-project::${{ env.SCRIBE_PRODUCT_VERSION }}
+            # --repository.mapping=scribe-security*scribe-training-vue-project::scribe-training-vue-project::${{ env.SCRIBE_PRODUCT_VERSION }}
+
 
       # - name: Run Platforms
       #   uses: scribe-security/action-platforms@dev
