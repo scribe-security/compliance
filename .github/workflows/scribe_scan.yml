@@ -54,9 +54,6 @@ jobs:
           source ./compliance_repo/.github/workflows/context
           printenv | grep SCRIBE_CONTEXT
 
-          echo "LOG_LEVEL=${{ inputs.log-level }}" >> $GITHUB_ENV
-
-
       - name: Discover Github Repo
         uses: scribe-security/action-platforms@dev
         with:
