@@ -109,6 +109,7 @@ collect_pipeline_and_git() {
       echo "git_branch"; echo "$branch"
       echo "git_url";    echo "$full_repo_url"
       echo "git_tag";    echo ""
+      echo "repo_name"; echo "$GITHUB_REPOSITORY"
       ;;
 
     # --------------------------------------------------------------------------
@@ -291,6 +292,41 @@ collect_pipeline_and_git() {
   esac
 }
 
+
+# Given the following env, build a scoping utils functions to pull in default values
+# PLATFORM=github
+# RUN_ID=13132548828
+# ACTOR=houdini91
+# WORKFLOW=collect-evidence-reusable-workflow
+# EVENT=pull_request
+# ORGANIZATION=scribe-security
+# GIT_COMMIT=1fe87458fd0654f932c4e89164cb5b03c6452e94
+# GIT_REF=refs/pull/11/merge
+# GIT_BRANCH=SH-7283-simplification
+# GIT_URL=https://github.com/scribe-security/A-demo-webserver.git
+# SCRIBE_CONTEXT_ACTOR=houdini91
+# SCRIBE_CONTEXT_GIT_REF=refs/pull/11/merge
+# SCRIBE_CONTEXT_ORGANIZATION=scribe-security
+# SCRIBE_CONTEXT_GIT_URL=https://github.com/scribe-security/A-demo-webserver.git
+# SCRIBE_CONTEXT_WORKFLOW=collect-evidence-reusable-workflow
+# SCRIBE_CONTEXT_GIT_BRANCH=SH-7283-simplification
+# SCRIBE_CONTEXT_PLATFORM=github
+# SCRIBE_CONTEXT_GIT_COMMIT=1fe87458fd0654f932c4e89164cb5b03c6452e94
+# SCRIBE_CONTEXT_EVENT=pull_request
+# SCRIBE_CONTEXT_RUN_ID=13132548828
+
+
+github_repo_name() {
+  # Get org and repo name from the git url
+  # https://github.com/scribe-security/A-demo-webserver.git > scribe-security/A-demo-webserver
+  local repo_url="${GIT_URL}"
+  local repo_name=$(echo "${repo_url}" | sed 's/.*:\/\/github.com\///' | sed 's/.git$//')
+  if [[ -n "$GITHUB_ENV" ]]; then
+    export SCRIBE_CONTEXT_REPO_NAME="${repo_name}" >> $GITHUB_ENV
+  fi
+}
+
+
 #------------------------------------------------------------------------------
 # main
 #   1) Auto-detect (or use $1) which platform.
@@ -321,7 +357,11 @@ main() {
 
     # UPPER CASE
     k="$(echo "$k" | tr '[:lower:]' '[:upper:]')"
-    export SCRIBE_CONTEXT_$k="$v" >> $GITHUB_ENV
+    # if github env exists
+    if [[ -n "$GITHUB_ENV" ]]; then
+      export SCRIBE_CONTEXT_$k="$v" >> $GITHUB_ENV
+    fi
+    
     echo "$k=$v"
   done
 }

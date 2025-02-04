@@ -49,7 +49,15 @@ jobs:
           ls -lhR ./compliance_repo/.github || true
           source ./compliance_repo/.github/workflows/context
           printenv | grep SCRIBE_CONTEXT
-          
+
+      # - name: Run Platforms
+      #   uses: scribe-security/action-platforms@dev
+      #   with:
+      #     input: git:./target_repo
+      #     scribe-client-secret: ${{ secrets.SCRIBE_TOKEN }}
+      #     verbose: 2
+      #     scribe-context: ${{ env.SCRIBE_CONTEXT }}
+
 
 
       # # if target is provided, scan the target
