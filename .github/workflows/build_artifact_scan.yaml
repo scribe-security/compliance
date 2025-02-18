@@ -1,0 +1,62 @@
+# Reusable GitHub Actions workflow for Scribe evidence job
+
+name: .scribe-in-pipeline-scan
+
+on:
+  workflow_call:
+    secrets:
+      SCRIBE_TOKEN:
+        required: false
+      DISCOVER_GITHUB_TOKEN:
+        required: true
+      DOCKERHUB_PASSWORD:
+        required: false
+      DOCKERHUB_USERNAME:
+        required: false
+    inputs:
+      target:
+        type: string
+        required: false
+      product-key:
+        type: string
+        required: false
+        default: "simplified_default"
+      product-version:
+        type: string
+        required: false
+      initative:
+        type: string
+        required: false
+
+jobs:
+  scribe-scan:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+            path: target_repo
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+            path: compliance_repo
+            repository: scribe-security/compliance
+
+      - name:  Target Image, Src, Generate BOM abd SLSA, upload to scribe
+        if : ${{ inputs.target }}
+        id: bom_image_tag
+        uses: scribe-security/action-bom@dev
+        with:
+          target: ${{ inputs.target }}
+          input: git:./target_repo
+          provenance: true
+          verbose: 2
+          filter-regex: ./**/test/**/
+          product-key: ${{ inputs.product-version }}
+         
+
+      
